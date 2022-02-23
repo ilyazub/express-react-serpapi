@@ -26,13 +26,14 @@ export function makeSearches(queries) {
   return Promise.all(promises);
 }
 
-// https://developers.cloudflare.com/pages/platform/functions#writing-your-first-function
-export async function onRequestGet({ params }) {
-  // TODO: Deduplicate request params retrieval
-  const queries = decodeURIComponent(params.q).split(",");
+export default async function handler(request, response) {
+  const queries = decodeURIComponent(request.query.q).split(",");
 
+  // The number of queries should be limited in a real application
+  // but it's omitted here in favor of simplicity
   const data = await makeSearches(queries);
 
-  const info = JSON.stringify(data);
-  return new Response(info, null, 2);
+  response
+    .status(200)
+    .json(data);
 }

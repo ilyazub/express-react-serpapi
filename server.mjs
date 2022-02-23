@@ -9,7 +9,7 @@ import 'dotenv/config'
 import express from "express";
 import { createServer as createViteServer } from "vite";
 
-import { makeSearches } from "./functions/api/search.mjs";
+import { makeSearches } from "./api/search.mjs";
 
 const { PORT = 3000 } = process.env;
 
@@ -25,7 +25,7 @@ async function createServer(
 
   const app = express();
 
-  app.get("/api/search", async (req, res, next) => {
+  app.get("/api/search", (req, res, next) => {
     const queries = decodeURIComponent(req.query.q).split(",");
 
     // The number of queries should be limited in a real application
@@ -34,8 +34,7 @@ async function createServer(
       .then((results) => {
         res
           .status(200)
-          .set({ "Content-Type": "application/json" })
-          .send(results);
+          .json(results);
       })
       .catch((e) => next(e));
   });
@@ -57,9 +56,12 @@ async function createServer(
     // use Vite's connect instance as middleware
     app.use(vite.middlewares);
   } else {
-    app.use(require("compression")());
+    const {default: compression} = await import("compression")
+    const {default: serveStatic} = await import("serve-static")
+
+    app.use(compression());
     app.use(
-      require("serve-static")(resolve("dist/client"), {
+      serveStatic(resolve("dist/client"), {
         index: false,
       })
     );
@@ -87,7 +89,7 @@ async function createServer(
         render = (await vite.ssrLoadModule("/src/entry-server.jsx")).render;
       } else {
         template = indexProd;
-        render = require("./dist/server/entry-server.js").render;
+        render = (await import("./dist/server/entry-server.js")).render;
       }
 
       let context = {};
@@ -100,8 +102,11 @@ async function createServer(
       // 5. Inject the app-rendered HTML into the template.
       const html = template.replace(`<!--ssr-outlet-->`, appHtml);
 
+      res.setHeader('Content-Type', 'text/html');
+      res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+  
       // 6. Send the rendered HTML back.
-      res.status(200).set({ "Content-Type": "text/html" }).end(html);
+      res.status(200).end(html);
     } catch (e) {
       // If an error is caught, let Vite fix the stacktrace so it maps back to
       // your actual source code.
