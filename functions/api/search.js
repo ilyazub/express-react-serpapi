@@ -27,3 +27,16 @@ function makeSearches(queries) {
 }
 
 exports.makeSearches = makeSearches;
+
+// https://developers.cloudflare.com/pages/platform/functions#writing-your-first-function
+async function onRequestGet({ params }) {
+  // TODO: Deduplicate request params retrieval
+  const queries = decodeURIComponent(params.q).split(",");
+
+  const data = await makeSearches(queries);
+
+  const info = JSON.stringify(data);
+  return new Response(info, null, 2);
+}
+
+exports.onRequestGet = onRequestGet;

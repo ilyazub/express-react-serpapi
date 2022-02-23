@@ -6,7 +6,7 @@ require("dotenv").config();
 const express = require("express");
 const { createServer: createViteServer } = require("vite");
 
-const { makeSearches } = require("./src/api.js");
+const { makeSearches } = require("./functions/api/search.js");
 
 const { PORT = 3000 } = process.env;
 
@@ -29,7 +29,10 @@ async function createServer(
     // but it's omitted here in favor of simplicity
     makeSearches(queries)
       .then((results) => {
-        res.send(results);
+        res
+          .status(200)
+          .set({ "Content-Type": "application/json" })
+          .send(results);
       })
       .catch((e) => next(e));
   });
