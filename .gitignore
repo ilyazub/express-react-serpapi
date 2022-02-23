@@ -1,0 +1,15 @@
+dist/*
+node_modules
+
+# local env files
+.env
+.env.*
+
+# Skip Yarn zero-install
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
