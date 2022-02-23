@@ -4,8 +4,6 @@ const __dirname = new URL('.', import.meta.url).pathname;
 import path from "path";
 import fs from "fs";
 
-import 'dotenv/config'
-
 import express from "express";
 import { createServer as createViteServer } from "vite";
 

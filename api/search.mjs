@@ -1,4 +1,7 @@
 import { GoogleSearch } from "google-search-results-nodejs";
+
+import 'dotenv/config'
+
 const search = new GoogleSearch(process.env.SERP_API_KEY);
 
 // Workaround to make it work with Promises
