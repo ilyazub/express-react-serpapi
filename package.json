@@ -5,15 +5,15 @@
   "description": "",
   "keywords": [],
   "license": "MIT",
-  "main": "server.js",
+  "main": "server.mjs",
   "scripts": {
-    "start": "yarn run dev",
-    "dev": "node server",
+    "start": "yarn dev",
+    "dev": "node server.mjs",
     "build": "vite build --outDir dist/client && vite build --outDir dist/server --ssr src/entry-server.jsx",
     "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.jsx",
-    "serve": "NODE_ENV=production node server",
-    "debug": "node --inspect-brk server",
+    "serve": "NODE_ENV=production node server.mjs",
+    "debug": "node --inspect-brk server.mjs",
     "preview": "vite preview",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
@@ -34,8 +34,7 @@
     "pinst": ">=2",
     "prettier": "^2.5.1",
     "serve-static": "^1.14.2",
-    "vite": "^2.8.0",
-    "wrangler": "beta"
+    "vite": "^2.8.0"
   },
   "packageManager": "yarn@3.1.1",
   "lint-staged": {

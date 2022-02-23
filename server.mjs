@@ -1,12 +1,15 @@
-const path = require("path");
-const fs = require("fs");
+import { URL } from 'url';
+const __dirname = new URL('.', import.meta.url).pathname;
 
-require("dotenv").config();
+import path from "path";
+import fs from "fs";
 
-const express = require("express");
-const { createServer: createViteServer } = require("vite");
+import 'dotenv/config'
 
-const { makeSearches } = require("./functions/api/search.js");
+import express from "express";
+import { createServer as createViteServer } from "vite";
+
+import { makeSearches } from "./functions/api/search.mjs";
 
 const { PORT = 3000 } = process.env;
 
